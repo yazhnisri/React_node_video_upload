@@ -6,7 +6,9 @@ const fs = require("fs");
 
 const app = express();
 const port = 3001;
-app.use(cors()); // Enable CORS for all routes
+
+// Enable CORS for requests from your frontend
+app.use(cors({ origin: "https://cstqkt-3000.csb.app" }));
 
 // Create storage engine
 const storage = multer.diskStorage({
@@ -29,7 +31,16 @@ const storage = multer.diskStorage({
 // Create multer instance with storage engine
 const upload = multer({ storage });
 
-// Upload endpoint
+/**
+ * Create a simple route to test the server
+ */
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+/**
+ * Upload a file to the server using multer storage engine
+ *
+ */
 app.post("/upload", upload.single("video"), (req, res) => {
   try {
     if (!req.file) {
@@ -45,5 +56,5 @@ app.post("/upload", upload.single("video"), (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server running on port ${port}`);
 });
